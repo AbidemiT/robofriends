@@ -2,12 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import RoboApp from "./containers/RoboApp";
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {createLogger} from 'redux-logger';
+import thunkMiddleware from "redux-thunk";
 import reportWebVitals from './reportWebVitals';
 import "tachyons";
 
+import {searchRobots, requestRobots} from "./reducers";
+
+const rootReducer = combineReducers({searchRobots, requestRobots})
+
+// Redux Logger
+const logger = createLogger();
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger));
+
 ReactDOM.render(
   <React.StrictMode>
-    <RoboApp greeting={`Welcome to my Robo friends Application, learning React is beutiful.`}/>
+    <Provider store={store}>
+      <RoboApp/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
